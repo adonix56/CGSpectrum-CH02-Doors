@@ -3,17 +3,17 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
+#include "Components/ActorComponent.h"
 #include "DoorInteractionComponent.generated.h"
 
-UCLASS()
-class CH02DOORS_API ADoorInteractionComponent : public AActor
+UCLASS(BlueprintType, Blueprintable, Meta = (BlueprintSpawnableComponent))
+class TERMONE_API UDoorInteractionComponent : public UActorComponent
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	ADoorInteractionComponent();
+	UDoorInteractionComponent();
 
 protected:
 	// Called when the game starts or when spawned
@@ -21,6 +21,9 @@ protected:
 
 public:	
 	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
+	UPROPERTY(EditAnywhere)
+	FString DataString;
 
 };

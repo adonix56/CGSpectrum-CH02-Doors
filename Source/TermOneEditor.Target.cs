@@ -3,13 +3,13 @@
 using UnrealBuildTool;
 using System.Collections.Generic;
 
-public class CH02DoorsTarget : TargetRules
+public class TermOneEditorTarget : TargetRules
 {
-	public CH02DoorsTarget(TargetInfo Target) : base(Target)
+	public TermOneEditorTarget(TargetInfo Target) : base(Target)
 	{
-		Type = TargetType.Game;
+		Type = TargetType.Editor;
 		DefaultBuildSettings = BuildSettingsVersion.V4;
 
-		ExtraModuleNames.AddRange( new string[] { "CH02Doors" } );
+		ExtraModuleNames.AddRange( new string[] { "TermOne" } );
 	}
 }

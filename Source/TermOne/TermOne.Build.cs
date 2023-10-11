@@ -2,9 +2,9 @@
 
 using UnrealBuildTool;
 
-public class CH02Doors : ModuleRules
+public class TermOne : ModuleRules
 {
-	public CH02Doors(ReadOnlyTargetRules Target) : base(Target)
+	public TermOne(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
