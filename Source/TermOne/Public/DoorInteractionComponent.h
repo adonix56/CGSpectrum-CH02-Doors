@@ -6,17 +6,19 @@
 #include "Components/ActorComponent.h"
 #include "DoorInteractionComponent.generated.h"
 
-UCLASS(BlueprintType, Blueprintable, Meta = (BlueprintSpawnableComponent))
+//class ATriggerBox;
+
+UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class TERMONE_API UDoorInteractionComponent : public UActorComponent
 {
 	GENERATED_BODY()
-	
+
 public:	
-	// Sets default values for this actor's properties
+	// Sets default values for this component's properties
 	UDoorInteractionComponent();
 
 protected:
-	// Called when the game starts or when spawned
+	// Called when the game starts
 	virtual void BeginPlay() override;
 
 public:	
@@ -24,6 +26,20 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	UPROPERTY(EditAnywhere)
-	FString DataString;
+	FRotator DesiredRotation = FRotator::ZeroRotator;
 
+	FRotator DeltaRotation = FRotator::ZeroRotator;
+	FRotator FinalRotation = FRotator::ZeroRotator;
+
+	UPROPERTY(EditAnywhere)
+	float TimeToRotate = 1.0f;
+	
+
+	//My Try
+	/*UPROPERTY(EditAnywhere)
+	float DistanceToOpen;
+
+private:
+	bool BoolDoorOpen;
+	*/
 };

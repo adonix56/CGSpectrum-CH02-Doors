@@ -3,25 +3,51 @@
 
 #include "DoorInteractionComponent.h"
 
-// Sets default values
+// Sets default values for this component's properties
 UDoorInteractionComponent::UDoorInteractionComponent()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
+	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
+
+	// ...
 }
 
-// Called when the game starts or when spawned
+
+// Called when the game starts
 void UDoorInteractionComponent::BeginPlay()
 {
 	Super::BeginPlay();
-	FRotator DesiredRotation(0.0f, 90.0f, 0.0f);
-	GetOwner()->SetActorRotation(DesiredRotation);
 
+	DesiredRotation = FRotator(0.0f, 90.0f, 0.0f);
+	DeltaRotation = DesiredRotation - GetOwner()->GetActorRotation();
+	FinalRotation = GetOwner()->GetActorRotation() + DeltaRotation;
+	//BoolDoorOpen = false;
+	// ...
+	
 }
+
 
 // Called every frame
 void UDoorInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
+	/*float CurrentDistance = FVector::Distance(GetOwner()->GetActorLocation(), GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorLocation());
+
+	UE_LOG(LogTemp, Warning, TEXT("Distance to Door %f"), CurrentDistance);
+
+	if (CurrentDistance < DistanceToOpen) {
+		BoolDoorOpen = true;
+	}*/
+
+	FRotator CurrentRotation = GetOwner()->GetActorRotation();
+	//if (BoolDoorOpen && !CurrentRotation.Equals(FinalRotation, 5.0f)) {
+	if (!CurrentRotation.Equals(FinalRotation)) {
+		CurrentRotation += DeltaRotation * DeltaTime;
+		GetOwner()->SetActorRotation(CurrentRotation);
+	}
+
+	// ...
 }
+
