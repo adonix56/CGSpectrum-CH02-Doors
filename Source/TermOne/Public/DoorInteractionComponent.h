@@ -4,9 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "Curves/CurveFloat.h"
 #include "DoorInteractionComponent.generated.h"
 
-//class ATriggerBox;
+class ATriggerBox;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class TERMONE_API UDoorInteractionComponent : public UActorComponent
@@ -28,13 +29,20 @@ public:
 	UPROPERTY(EditAnywhere)
 	FRotator DesiredRotation = FRotator::ZeroRotator;
 
-	FRotator DeltaRotation = FRotator::ZeroRotator;
+	FRotator StartRotation = FRotator::ZeroRotator;
 	FRotator FinalRotation = FRotator::ZeroRotator;
 
 	UPROPERTY(EditAnywhere)
 	float TimeToRotate = 1.0f;
+
+	float CurrentRotationTime = 0.0f;
 	
 
+	UPROPERTY(EditAnywhere)
+	ATriggerBox* TriggerBox;
+
+	UPROPERTY(EditAnywhere)
+	FRuntimeFloatCurve OpenCurve;
 	//My Try
 	/*UPROPERTY(EditAnywhere)
 	float DistanceToOpen;
