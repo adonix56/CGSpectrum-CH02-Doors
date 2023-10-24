@@ -60,7 +60,30 @@ void UDoorInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickTy
 		BoolDoorOpen = true;
 	}*/
 
-	if (CurrentRotationTime < TimeToRotate) {
+	if (DoorState == EDoorState::DS_Closed) {
+		//Get Player Pawn
+		APawn* PlayerPawn = GetWorld()->GetFirstPlayerController()->GetPawn();
+		//Check is Player Pawn is inside Trigger Box
+		if (PlayerPawn && TriggerBox->IsOverlappingActor(PlayerPawn)) {
+			DoorState = EDoorState::DS_Opening;
+			CurrentRotationTime = 0.0f;
+		}
+	}
+	else if (DoorState == EDoorState::DS_Opening) {
+		CurrentRotationTime += DeltaTime;
+		const float TimeRatio = FMath::Clamp(CurrentRotationTime / TimeToRotate, 0.0f, 1.0f);
+		const float RotationAlpha = OpenCurve.GetRichCurveConst()->Eval(TimeRatio);
+		const FRotator CurrentRotation = FMath::Lerp(StartRotation, FinalRotation, RotationAlpha);
+		GetOwner()->SetActorRotation(CurrentRotation);
+
+		if (TimeRatio >= 1.0f) {
+			DoorState = EDoorState::DS_Open;
+			GEngine->AddOnScreenDebugMessage(3, 3.0f, FColor::Yellow, TEXT("DoorOpened"));
+			OpenedEvent.Broadcast();
+		}
+	}
+
+	/*if (CurrentRotationTime < TimeToRotate) {
 		if (TriggerBox && GetWorld() && GetWorld()->GetFirstLocalPlayerFromController()) {
 			APawn* PlayerPawn = GetWorld()->GetFirstPlayerController()->GetPawn();
 
@@ -73,6 +96,7 @@ void UDoorInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickTy
 			}
 		}
 	}
+	*/
 	DebugDraw();
 }
 
