@@ -44,6 +44,8 @@ public:
 
 	void DebugDraw();
 
+	void OnDoorOpen();
+
 	UPROPERTY(EditAnywhere)
 	FRotator DesiredRotation = FRotator::ZeroRotator;
 

@@ -6,6 +6,7 @@
 #include "GameFramework/PlayerController.h"
 #include "Engine/World.h"
 #include "Engine/TriggerBox.h"
+#include "ObjectiveWorldSubsystem.h"
 
 //#include "DrawDebugHelpers.h"
 
@@ -40,7 +41,14 @@ void UDoorInteractionComponent::BeginPlay()
 	StartRotation = GetOwner()->GetActorRotation();
 	FinalRotation = GetOwner()->GetActorRotation() + DesiredRotation;
 	CurrentRotationTime = 0.0f;
-	UE_LOG(LogTemp, Warning, TEXT("Hello! YEEESH"));
+	//UE_LOG(LogTemp, Warning, TEXT("Hello! YEEESH"));
+
+	/*UObjectiveWorldSubsystem* ObjectiveWorldSubsystem = GetWorld()->GetSubsystem<UObjectiveWorldSubsystem>();
+
+	if (ObjectiveWorldSubsystem) {
+		OpenedEvent.AddUObject(ObjectiveWorldSubsystem, &UObjectiveWorldSubsystem::OnObjectCompleted);
+	}
+	*/
 	//BoolDoorOpen = false;
 	// ...
 	
@@ -77,9 +85,7 @@ void UDoorInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickTy
 		GetOwner()->SetActorRotation(CurrentRotation);
 
 		if (TimeRatio >= 1.0f) {
-			DoorState = EDoorState::DS_Open;
-			GEngine->AddOnScreenDebugMessage(3, 3.0f, FColor::Yellow, TEXT("DoorOpened"));
-			OpenedEvent.Broadcast();
+			OnDoorOpen();
 		}
 	}
 
@@ -111,5 +117,15 @@ void UDoorInteractionComponent::DebugDraw() {
 		FString EnumAsString = TEXT("Door State: ") + UEnum::GetDisplayValueAsText(DoorState).ToString();
 		DrawDebugString(GetWorld(), Offset, EnumAsString, GetOwner(), FColor::Blue, 0.0f);
 	}
+}
+
+void UDoorInteractionComponent::OnDoorOpen() {
+	DoorState = EDoorState::DS_Open;
+	UObjectiveComponent* ObjectiveComponent = GetOwner()->FindComponentByClass<UObjectiveComponent>();
+	if (ObjectiveComponent) {
+		ObjectiveComponent->SetState(EObjectiveState::OS_Completed);
+	}
+	GEngine->AddOnScreenDebugMessage(3, 3.0f, FColor::Yellow, TEXT("DoorOpened"));
+	//OpenedEvent.Broadcast();
 }
 
