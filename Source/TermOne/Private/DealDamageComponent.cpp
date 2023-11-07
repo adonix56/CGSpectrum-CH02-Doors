@@ -22,7 +22,7 @@ UDealDamageComponent::UDealDamageComponent()
 
 void UDealDamageComponent::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {
 	UE_LOG(LogTemp, Warning, TEXT("UDealDamageComponent::OnOverlapBegin"));
-	if (OtherActor == GetOwner()) {
+	if (!bActive || OtherActor == GetOwner()) {
 		return;
 	}
 
