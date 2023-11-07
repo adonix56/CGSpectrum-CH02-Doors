@@ -22,9 +22,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	//APawn* PlayerPawn;
 
 	UPROPERTY(EditAnywhere, NoClear)
 	UDealDamageComponent* DealDamageComponent;
@@ -36,4 +34,8 @@ public:
 	float ToggleTime = 5.0f;
 
 	float CurrentTimer = 0.0f;
+
+public:	
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
 };

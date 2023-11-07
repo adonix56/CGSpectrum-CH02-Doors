@@ -28,10 +28,7 @@ void UDealDamageComponent::OnOverlapBegin(class UPrimitiveComponent* OverlappedC
 
 	ATermOnePlayerCharacter* PlayerCharacter = Cast<ATermOnePlayerCharacter>(OtherActor);
 	if (PlayerCharacter) {
-		TSubclassOf<UDamageType> const ValidDamageTypeClass = TSubclassOf<UDamageType>(UDamageType::StaticClass());
-		FDamageEvent DamageEvent(ValidDamageTypeClass);
-
-		PlayerCharacter->TakeDamage(BaseDamage, DamageEvent, nullptr, GetOwner());
+		DealDamage(PlayerCharacter);
 	}
 }
 
@@ -39,6 +36,12 @@ void UDealDamageComponent::OnOverlapEnd(class UPrimitiveComponent* OverlappedCom
 	UE_LOG(LogTemp, Warning, TEXT("UDealDamageComponent::OnOverlapEnd"));
 }
 
+void UDealDamageComponent::DealDamage(ATermOnePlayerCharacter* PlayerCharacter) {
+	TSubclassOf<UDamageType> const ValidDamageTypeClass = TSubclassOf<UDamageType>(UDamageType::StaticClass());
+	FDamageEvent DamageEvent(ValidDamageTypeClass);
+
+	PlayerCharacter->TakeDamage(BaseDamage, DamageEvent, nullptr, GetOwner());
+}
 
 // Called when the game starts
 void UDealDamageComponent::BeginPlay()

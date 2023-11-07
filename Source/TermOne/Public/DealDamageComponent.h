@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "TermOnePlayerCharacter.h"
 #include "Components/ActorComponent.h"
 #include "DealDamageComponent.generated.h"
 
@@ -27,6 +28,8 @@ public:
 
 	bool IsActive() const { return bActive; }
 	void SetActive(bool IsActive) { bActive = IsActive; }
+
+	void DealDamage(ATermOnePlayerCharacter* PlayerCharacter);
 
 protected:
 	// Called when the game starts
