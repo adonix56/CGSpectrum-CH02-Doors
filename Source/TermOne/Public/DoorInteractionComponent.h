@@ -4,8 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "Engine/TriggerBase.h"
 #include "Curves/CurveFloat.h"
 #include "DoorInteractionComponent.generated.h"
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOpenDoor);
 
 class ATriggerBox;
 class IConsoleVariable;
@@ -40,6 +43,9 @@ public:
 
 	FOpened OpenedEvent;
 
+	UPROPERTY(BlueprintAssignable)
+	FOpenDoor OnDoorOpened;
+
 	static void OnDebugToggled(IConsoleVariable *Var);
 
 	void DebugDraw();
@@ -59,7 +65,7 @@ public:
 	
 
 	UPROPERTY(EditAnywhere)
-	ATriggerBox* TriggerBox;
+	ATriggerBase* TriggerActor;
 
 	UPROPERTY(EditAnywhere)
 	FRuntimeFloatCurve OpenCurve;

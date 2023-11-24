@@ -72,7 +72,7 @@ void UDoorInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickTy
 		//Get Player Pawn
 		APawn* PlayerPawn = GetWorld()->GetFirstPlayerController()->GetPawn();
 		//Check is Player Pawn is inside Trigger Box
-		if (PlayerPawn && TriggerBox->IsOverlappingActor(PlayerPawn)) {
+		if (PlayerPawn && TriggerActor->IsOverlappingActor(PlayerPawn)) {
 			DoorState = EDoorState::DS_Opening;
 			CurrentRotationTime = 0.0f;
 		}
@@ -127,5 +127,6 @@ void UDoorInteractionComponent::OnDoorOpen() {
 	}
 	GEngine->AddOnScreenDebugMessage(3, 3.0f, FColor::Yellow, TEXT("DoorOpened"));
 	//OpenedEvent.Broadcast();
+	OnDoorOpened.Broadcast();
 }
 
