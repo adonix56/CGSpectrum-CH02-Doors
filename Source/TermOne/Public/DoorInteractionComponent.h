@@ -8,7 +8,7 @@
 #include "Curves/CurveFloat.h"
 #include "DoorInteractionComponent.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOpenDoor);
+//DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOpenDoor);
 
 class ATriggerBox;
 class IConsoleVariable;
@@ -43,8 +43,8 @@ public:
 
 	FOpened OpenedEvent;
 
-	UPROPERTY(BlueprintAssignable)
-	FOpenDoor OnDoorOpened;
+	//UPROPERTY(BlueprintAssignable, Category="Door Interaction")
+	//FOpenDoor OnDoorOpened;
 
 	static void OnDebugToggled(IConsoleVariable *Var);
 

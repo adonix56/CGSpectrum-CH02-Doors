@@ -6,6 +6,8 @@
 #include "Engine/StaticMeshActor.h"
 #include "InteractableDoor.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOpenDoor);
+
 class UDoorInteractionComponent;
 /**
  * 
@@ -17,6 +19,9 @@ class TERMONE_API AInteractableDoor : public AStaticMeshActor
 	
 public:
 	AInteractableDoor();
+
+	UPROPERTY(BlueprintAssignable, Category="Door Interaction")
+	FOpenDoor OnDoorOpen;
 
 protected:
 	UPROPERTY(EditAnywhere, NoClear)

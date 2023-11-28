@@ -127,6 +127,6 @@ void UDoorInteractionComponent::OnDoorOpen() {
 	}
 	GEngine->AddOnScreenDebugMessage(3, 3.0f, FColor::Yellow, TEXT("DoorOpened"));
 	//OpenedEvent.Broadcast();
-	OnDoorOpened.Broadcast();
+	//OnDoorOpened.Broadcast();
 }
 
