@@ -1,8 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "HealthComponent.h"
-//#include "GameFramework/PlayerController.h"
-//#include "GameFramework/DamageType.h"
+#include "GameFramework/PlayerController.h"
+#include "GameFramework/DamageType.h"
 #include "TermOnePlayerCharacter.h"
 
 // Sets default values
