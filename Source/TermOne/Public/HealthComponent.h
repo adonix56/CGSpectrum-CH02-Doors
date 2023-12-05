@@ -17,6 +17,7 @@ public:
 	UHealthComponent();
 	void TakeDamage(float Damage) { CurrentHealth -= Damage; }
 	bool IsDead() { return CurrentHealth <= FLT_EPSILON; }
+	float GetCurrentHealth() { return CurrentHealth; }
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;

@@ -76,6 +76,22 @@ void ATermOnePlayerCharacter::SetOnFire(float BaseDamage, float DamageTotalTime,
 	}
 }
 
+const bool ATermOnePlayerCharacter::IsAlive() const
+{
+	if (HealthComponent) {
+		return !HealthComponent->IsDead();
+	}
+	return false;
+}
+
+const float ATermOnePlayerCharacter::GetCurrentHealth() const
+{
+	if (HealthComponent) { 
+		return HealthComponent->GetCurrentHealth(); 
+	}
+	return 0.0f;
+}
+
 void ATermOnePlayerCharacter::StartInteraction() {
 	OnInteractionStart.Broadcast();
 }

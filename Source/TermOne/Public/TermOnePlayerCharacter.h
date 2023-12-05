@@ -48,6 +48,12 @@ public:
 
 	void SetOnFire(float BaseDamage, float DamageTotalTime, float TakeDamageInterval);
 
+	UFUNCTION(BlueprintCallable)
+	const bool IsAlive() const;
+
+	UFUNCTION(BlueprintCallable)
+	const float GetCurrentHealth() const;
+
 	void StartInteraction();
 
 	void StopInteraction();
