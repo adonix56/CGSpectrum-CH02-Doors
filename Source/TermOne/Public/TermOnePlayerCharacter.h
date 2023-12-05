@@ -7,6 +7,11 @@
 #include "TermOnePlayerCharacter.generated.h"
 
 class UHealthComponent;
+class UParticleSystemComponent;
+class UDamageHandlerComponent;
+
+DECLARE_MULTICAST_DELEGATE(FOnInteractionStart);
+DECLARE_MULTICAST_DELEGATE(FOnInteractionCancel);
 
 UCLASS()
 class TERMONE_API ATermOnePlayerCharacter : public ACharacter
@@ -15,7 +20,7 @@ class TERMONE_API ATermOnePlayerCharacter : public ACharacter
 
 public:
 	// Sets default values for this character's properties
-	ATermOnePlayerCharacter();
+	ATermOnePlayerCharacter(const FObjectInitializer& ObjectInitializer);
 
 protected:
 	// Called when the game starts or when spawned
@@ -25,6 +30,10 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	UHealthComponent* HealthComponent;
+
+	UPROPERTY(EditAnywhere)
+	UDamageHandlerComponent* DamageHandlerComponent;
+
 
 public:	
 	// Called every frame
@@ -36,4 +45,16 @@ public:
 	virtual void FellOutOfWorld(const class UDamageType& dmgType) override;
 
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser);
+
+	void SetOnFire(float BaseDamage, float DamageTotalTime, float TakeDamageInterval);
+
+	void StartInteraction();
+
+	void StopInteraction();
+
+	UPROPERTY(EditAnywhere)
+	UParticleSystemComponent* ParticleSystemComponent;
+
+	FOnInteractionStart OnInteractionStart;
+	FOnInteractionCancel OnInteractionCancel;
 };

@@ -19,11 +19,15 @@ class TERMONE_API AInteractableDoor : public AStaticMeshActor
 	
 public:
 	AInteractableDoor();
+	virtual void BeginPlay() override;
 
 	UPROPERTY(BlueprintAssignable, Category="Door Interaction")
 	FOpenDoor OnDoorOpen;
 
 protected:
+	UFUNCTION()
+	void OnInteractionSuccess();
+
 	UPROPERTY(EditAnywhere, NoClear)
 	UDoorInteractionComponent* DoorInteractionComponent;
 };

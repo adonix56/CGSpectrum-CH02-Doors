@@ -2,23 +2,38 @@
 
 
 #include "ObjectiveWorldSubsystem.h"
+#include "TermOneGameModeBase.h"
 #include "Kismet/GameplayStatics.h"
 
-void UObjectiveWorldSubsystem::CreateObjectiveWidget(TSubclassOf<UUserWidget> ObjectiveWidgetClass) {
+void UObjectiveWorldSubsystem::Deinitialize() {
+	ObjectiveWidget = nullptr;
+	ObjectivesCompleteWidget = nullptr;
+}
+
+void UObjectiveWorldSubsystem::CreateObjectiveWidgets() {
 	if (ObjectiveWidget == nullptr) {
-		APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-		ObjectiveWidget = CreateWidget<UUserWidget>(PlayerController, ObjectiveWidgetClass);
+		ATermOneGameModeBase* GameMode = Cast<ATermOneGameModeBase>(GetWorld()->GetAuthGameMode());
+		if (GameMode) {
+			APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+			ObjectiveWidget = CreateWidget<UObjectiveHud>(PlayerController, GameMode->ObjectiveWidgetClass);
+			ObjectivesCompleteWidget = CreateWidget<UUserWidget>(PlayerController, GameMode->ObjectivesCompleteWidgetClass);
+		}
 	}
 }
 
 void UObjectiveWorldSubsystem::DisplayObjectiveWidget() {
-	ensureMsgf(ObjectiveWidget, TEXT("UOBjectiveWorldSubsystem::DisplayObjectiveWidget() ObjectiveWidget is nullptr. Be sure to call CreateObjectiveWidget() first."));
-	ObjectiveWidget->AddToViewport();
+	//ensureMsgf(ObjectiveWidget, TEXT("UOBjectiveWorldSubsystem::DisplayObjectiveWidget() ObjectiveWidget is nullptr. Be sure to call CreateObjectiveWidget() first."));
+	if (ObjectiveWidget) {
+		if (!ObjectiveWidget->IsInViewport()) {
+			ObjectiveWidget->AddToViewport();
+		}
+		ObjectiveWidget->UpdateObjectiveText(GetCompletedObjectiveCount(), Objectives.Num());
+	}
 }
 
-void UObjectiveWorldSubsystem::OnObjectCompleted() {
+/*void UObjectiveWorldSubsystem::OnObjectCompleted() {
 	DisplayObjectiveWidget();
-}
+}*/
 
 void UObjectiveWorldSubsystem::AddObjective(UObjectiveComponent* ObjectiveComponent) {
 	check(ObjectiveComponent);
@@ -31,7 +46,44 @@ void UObjectiveWorldSubsystem::AddObjective(UObjectiveComponent* ObjectiveCompon
 }
 
 void UObjectiveWorldSubsystem::RemoveObjective(UObjectiveComponent* ObjectiveComponent) {
+	int32 numRemoved = ObjectiveComponent->OnStateChanged().RemoveAll(this);
+	//check(numRemoved);
 	Objectives.Remove(ObjectiveComponent);
+}
+
+/*void UObjectiveWorldSubsystem::CreateObjectiveWidget() {
+	if (ObjectiveWidget == nullptr) {
+		ATermOneGameModeBase* GameMode = Cast<ATermOneGameModeBase>(GetWorld()->GetAuthGameMode());
+		if (GameMode) {
+			APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+			ObjectiveWidget = CreateWidget<UObjectiveHud>
+		}
+	}
+}
+
+void UObjectiveWorldSubsystem::DisplayObjectiveWidget() {
+	if (ObjectiveWidget) {
+		ObjectiveWidget->AddToViewport();
+		ObjectiveWidget->UpdateObjectiveText(GetCompletedObjectiveCount(), Objectives.Num());
+	}
+}*/
+
+void UObjectiveWorldSubsystem::RemoveObjectiveWidget() {
+	if (ObjectiveWidget) {
+		ObjectiveWidget->RemoveFromViewport();
+	}
+}
+
+void UObjectiveWorldSubsystem::DisplayObjectivesCompleteWidget() {
+	if (ObjectivesCompleteWidget && !ObjectivesCompleteWidget->IsInViewport()) {
+		ObjectivesCompleteWidget->AddToViewport();
+	}
+}
+
+void UObjectiveWorldSubsystem::RemoveObjectivesCompleteWidget() {
+	if (ObjectivesCompleteWidget) {
+		ObjectivesCompleteWidget->RemoveFromViewport();
+	}
 }
 
 FString UObjectiveWorldSubsystem::GetCurrentObjectiveDescription() {
@@ -46,6 +98,38 @@ FString UObjectiveWorldSubsystem::GetCurrentObjectiveDescription() {
 	return RetObjective;
 }
 
+uint32 UObjectiveWorldSubsystem::GetCompletedObjectiveCount()
+{
+	uint32 ObjectivesCompleted = 0u;
+
+	for (const UObjectiveComponent* OC : Objectives) {
+		if (OC && OC->GetState() == EObjectiveState::OS_Completed) {
+			ObjectivesCompleted++;
+		}
+	}
+
+	return ObjectivesCompleted;
+}
+
+void UObjectiveWorldSubsystem::OnMapStart() {
+	ATermOneGameModeBase* GameMode = Cast<ATermOneGameModeBase>(GetWorld()->GetAuthGameMode());
+
+	if (GameMode) {
+		CreateObjectiveWidgets();
+		DisplayObjectiveWidget();
+	}
+}
+
 void UObjectiveWorldSubsystem::OnObjectiveStateChanged(UObjectiveComponent* ObjectiveComponent, EObjectiveState ObjectiveState) {
-	DisplayObjectiveWidget();
+
+	if (Objectives.Num() == 0 || !Objectives.Contains(ObjectiveComponent)) { return; }
+
+	if (ObjectiveWidget && ObjectivesCompleteWidget) {
+		if (GetCompletedObjectiveCount() == Objectives.Num()) {
+			//Game Over
+			//RemoveObjectiveWidget();
+			DisplayObjectivesCompleteWidget();
+		}
+		DisplayObjectiveWidget();
+	}
 }

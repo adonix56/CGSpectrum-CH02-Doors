@@ -28,7 +28,8 @@ void UDealDamageComponent::OnOverlapBegin(class UPrimitiveComponent* OverlappedC
 
 	ATermOnePlayerCharacter* PlayerCharacter = Cast<ATermOnePlayerCharacter>(OtherActor);
 	if (PlayerCharacter) {
-		DealDamage(PlayerCharacter);
+		//DealDamage(PlayerCharacter);
+		PlayerCharacter->SetOnFire(BaseDamage, DamageTotalTime, TakeDamageInterval);
 	}
 }
 

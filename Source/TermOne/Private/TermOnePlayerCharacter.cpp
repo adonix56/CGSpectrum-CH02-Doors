@@ -3,15 +3,21 @@
 #include "HealthComponent.h"
 #include "GameFramework/PlayerController.h"
 #include "GameFramework/DamageType.h"
+#include "DamageHandlerComponent.h"
 #include "TermOnePlayerCharacter.h"
+#include "Particles/ParticleSystemComponent.h"
 
 // Sets default values
-ATermOnePlayerCharacter::ATermOnePlayerCharacter()
+ATermOnePlayerCharacter::ATermOnePlayerCharacter(const FObjectInitializer& ObjectInitializer) 
+	: Super(ObjectInitializer)
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("HealthComponent"));
+	DamageHandlerComponent = CreateDefaultSubobject<UDamageHandlerComponent>(TEXT("DamageHandlerComponent"));
+	ParticleSystemComponent = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("ParticleSystemComponent"));
+	ParticleSystemComponent->SetupAttachment(RootComponent);
 }
 
 // Called when the game starts or when spawned
@@ -33,6 +39,9 @@ void ATermOnePlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerI
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+	FInputActionBinding* Binding;
+	Binding = &PlayerInputComponent->BindAction(FName("InteractionStart"), IE_Pressed, this, &ATermOnePlayerCharacter::StartInteraction);
+	Binding = &PlayerInputComponent->BindAction(FName("InteractionStop"), IE_Pressed, this, &ATermOnePlayerCharacter::StopInteraction);
 }
 
 void ATermOnePlayerCharacter::FellOutOfWorld(const UDamageType& dmgType) {
@@ -58,4 +67,19 @@ float ATermOnePlayerCharacter::TakeDamage(float DamageAmount, struct FDamageEven
 	}
 
 	return Damage;
+}
+
+void ATermOnePlayerCharacter::SetOnFire(float BaseDamage, float DamageTotalTime, float TakeDamageInterval)
+{
+	if (DamageHandlerComponent) {
+		DamageHandlerComponent->TakeFireDamage(BaseDamage, DamageTotalTime, TakeDamageInterval);
+	}
+}
+
+void ATermOnePlayerCharacter::StartInteraction() {
+	OnInteractionStart.Broadcast();
+}
+
+void ATermOnePlayerCharacter::StopInteraction() {
+	OnInteractionCancel.Broadcast();
 }

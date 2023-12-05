@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
 #include "Blueprint/UserWidget.h"
+#include "ObjectiveHud.h"
 #include "TermOneGameModeBase.generated.h"
 
 /**
@@ -19,7 +20,10 @@ public:
 	virtual void StartPlay() override;
 	
 	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<UUserWidget> ObjectiveWidgetClass;
+	TSubclassOf<UObjectiveHud> ObjectiveWidgetClass;
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<UUserWidget> ObjectivesCompleteWidgetClass;
 
 	//UUserWidget* ObjectiveWidget = nullptr;
 

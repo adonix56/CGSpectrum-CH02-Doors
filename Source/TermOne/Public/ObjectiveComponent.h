@@ -35,8 +35,13 @@ public:
 
 protected:
 	// Called when the game starts
-	virtual void BeginPlay() override;
+	//virtual void BeginPlay() override;
+
+	//InitializeComponent gets called before BeginPlay(). Similar to Awake() vs Start()
+	virtual void InitializeComponent() override;
+
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+
 
 	UPROPERTY(EditAnywhere)
 	FString Description;

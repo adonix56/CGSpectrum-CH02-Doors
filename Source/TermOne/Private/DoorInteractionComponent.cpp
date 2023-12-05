@@ -29,7 +29,17 @@ UDoorInteractionComponent::UDoorInteractionComponent()
 	PrimaryComponentTick.bCanEverTick = true;
 
 	CVarToggleDebugDoor.AsVariable()->SetOnChangedCallback(FConsoleVariableDelegate::CreateStatic(&UDoorInteractionComponent::OnDebugToggled));
+
+	DoorState = EDoorState::DS_Closed;
 	// ...
+}
+
+void UDoorInteractionComponent::InteractionStart() {
+	Super::InteractionStart();
+	UE_LOG(LogTemp, Warning, TEXT("InDoorInteraction"));
+	if (InteractingActor) {
+		DoorOpen();
+	}
 }
 
 
@@ -54,6 +64,13 @@ void UDoorInteractionComponent::BeginPlay()
 	
 }
 
+void UDoorInteractionComponent::DoorOpen() {
+	if (IsOpen() || DoorState == EDoorState::DS_Opening) { return; }
+
+	DoorState = EDoorState::DS_Opening;
+	CurrentRotationTime = 0.0f;
+}
+
 
 // Called every frame
 void UDoorInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -68,7 +85,7 @@ void UDoorInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickTy
 		BoolDoorOpen = true;
 	}*/
 
-	if (DoorState == EDoorState::DS_Closed) {
+	/*if (DoorState == EDoorState::DS_Closed) {
 		//Get Player Pawn
 		APawn* PlayerPawn = GetWorld()->GetFirstPlayerController()->GetPawn();
 		//Check is Player Pawn is inside Trigger Box
@@ -77,7 +94,8 @@ void UDoorInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickTy
 			CurrentRotationTime = 0.0f;
 		}
 	}
-	else if (DoorState == EDoorState::DS_Opening) {
+	else */
+	if (DoorState == EDoorState::DS_Opening) {
 		CurrentRotationTime += DeltaTime;
 		const float TimeRatio = FMath::Clamp(CurrentRotationTime / TimeToRotate, 0.0f, 1.0f);
 		const float RotationAlpha = OpenCurve.GetRichCurveConst()->Eval(TimeRatio);
@@ -107,7 +125,7 @@ void UDoorInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickTy
 }
 
 void UDoorInteractionComponent::OnDebugToggled(IConsoleVariable *Var) {
-	UE_LOG(LogTemp, Warning, TEXT("OnDebugToggled Called"));
+	UE_LOG(LogTemp, Warning, TEXT("OnDebugToggled Called"));  
 }
 
 void UDoorInteractionComponent::DebugDraw() {
@@ -128,5 +146,6 @@ void UDoorInteractionComponent::OnDoorOpen() {
 	GEngine->AddOnScreenDebugMessage(3, 3.0f, FColor::Yellow, TEXT("DoorOpened"));
 	//OpenedEvent.Broadcast();
 	//OnDoorOpened.Broadcast();
+	InteractionSuccess.Broadcast();
 }
 

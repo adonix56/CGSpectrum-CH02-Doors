@@ -6,6 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "Engine/TriggerBase.h"
 #include "Curves/CurveFloat.h"
+#include "InteractionComponent.h"
 #include "DoorInteractionComponent.generated.h"
 
 //DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOpenDoor);
@@ -22,7 +23,7 @@ enum class EDoorState {
 };
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class TERMONE_API UDoorInteractionComponent : public UActorComponent
+class TERMONE_API UDoorInteractionComponent : public UInteractionComponent
 {
 	GENERATED_BODY()
 
@@ -33,6 +34,22 @@ public:
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
+
+	void InteractionStart() override;
+
+	UFUNCTION(BlueprintCallable)
+	void DoorOpen();
+
+	void OnDoorOpen();
+
+	UFUNCTION(BlueprintCallable)
+	bool IsOpen() { return DoorState == EDoorState::DS_Open; }
+
+	UPROPERTY(EditAnywhere)
+	FRotator DesiredRotation = FRotator::ZeroRotator;
+
+	FRotator StartRotation = FRotator::ZeroRotator;
+	FRotator FinalRotation = FRotator::ZeroRotator;
 
 public:	
 	// Called every frame
@@ -50,22 +67,10 @@ public:
 
 	void DebugDraw();
 
-	void OnDoorOpen();
-
-	UPROPERTY(EditAnywhere)
-	FRotator DesiredRotation = FRotator::ZeroRotator;
-
-	FRotator StartRotation = FRotator::ZeroRotator;
-	FRotator FinalRotation = FRotator::ZeroRotator;
-
 	UPROPERTY(EditAnywhere)
 	float TimeToRotate = 1.0f;
 
 	float CurrentRotationTime = 0.0f;
-	
-
-	UPROPERTY(EditAnywhere)
-	ATriggerBase* TriggerActor;
 
 	UPROPERTY(EditAnywhere)
 	FRuntimeFloatCurve OpenCurve;

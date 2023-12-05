@@ -25,11 +25,11 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "Interaction")
 	FOnInteractionSuccess InteractionSuccess;
 
-	//UFUNCTION()
-	//virtual void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	UFUNCTION()
+	virtual void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
-	//UFUNCTION()
-	//virtual void OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	UFUNCTION()
+	virtual void OnOverlapEnd(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
 	UCapsuleComponent* GetTriggerCapsule() const { return TriggerCapsule; }
 
@@ -37,8 +37,8 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-	//UFUNCTION(BlueprintCallable)
-	//virtual void InteractionStart();
+	UFUNCTION(BlueprintCallable)
+	virtual void InteractionStart();
 
 	UPROPERTY(EditAnywhere)
 	FText InteractionPrompt;
