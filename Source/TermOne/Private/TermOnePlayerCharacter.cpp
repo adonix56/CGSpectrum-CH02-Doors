@@ -45,10 +45,22 @@ void ATermOnePlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerI
 }
 
 void ATermOnePlayerCharacter::FellOutOfWorld(const UDamageType& dmgType) {
-	OnDeath(true);
+	if (HealthComponent && !HealthComponent->IsDead()) {
+		HealthComponent->SetHealth(0.0f);
+		OnDeath(true);
+	}
 }
 
 void ATermOnePlayerCharacter::OnDeath(bool IsFellOut) {
+	APlayerController* PlayerController = GetController<APlayerController>();
+	if (PlayerController) {
+		PlayerController->DisableInput(PlayerController);
+	}
+	GetWorld()->GetTimerManager().SetTimer(RestartLevelTimerHandle, this, &ATermOnePlayerCharacter::OnDeathTimerFinished, TimeRestartLevelAfterDeath, false);
+}
+
+void ATermOnePlayerCharacter::OnDeathTimerFinished()
+{
 	APlayerController* PlayerController = GetController<APlayerController>();
 	if (PlayerController) {
 		PlayerController->RestartLevel();
@@ -58,9 +70,8 @@ void ATermOnePlayerCharacter::OnDeath(bool IsFellOut) {
 float ATermOnePlayerCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) {
 	float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 	UE_LOG(LogTemp, Warning, TEXT("ATermOnePlayerCharacteR::TakeDamage Damage %.2f"), Damage);
-	if (HealthComponent) {
+	if (HealthComponent && !HealthComponent->IsDead()) {
 		HealthComponent->TakeDamage(Damage);
-		//TODO: Try adding this logic to the HealthComponent. Get Owner, cast as ATermOnePlayerCharacter then call OnDeath(false)
 		if (HealthComponent->IsDead()) {
 			OnDeath(false);
 		}

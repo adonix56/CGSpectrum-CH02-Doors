@@ -28,12 +28,19 @@ protected:
 
 	void OnDeath(bool IsFellOut);
 
+	UFUNCTION()
+	void OnDeathTimerFinished();
+
 	UPROPERTY(EditAnywhere)
 	UHealthComponent* HealthComponent;
 
 	UPROPERTY(EditAnywhere)
 	UDamageHandlerComponent* DamageHandlerComponent;
 
+	UPROPERTY(EditAnywhere)
+	float TimeRestartLevelAfterDeath = 2.0f;
+
+	FTimerHandle RestartLevelTimerHandle;
 
 public:	
 	// Called every frame

@@ -18,6 +18,7 @@ public:
 	void TakeDamage(float Damage) { CurrentHealth -= Damage; }
 	bool IsDead() { return CurrentHealth <= FLT_EPSILON; }
 	float GetCurrentHealth() { return CurrentHealth; }
+	void SetHealth(float health) { CurrentHealth = health; }
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
