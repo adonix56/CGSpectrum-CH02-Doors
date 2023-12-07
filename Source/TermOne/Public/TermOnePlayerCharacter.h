@@ -20,7 +20,7 @@ class TERMONE_API ATermOnePlayerCharacter : public ACharacter
 
 public:
 	// Sets default values for this character's properties
-	ATermOnePlayerCharacter(const FObjectInitializer& ObjectInitializer);
+	ATermOnePlayerCharacter();
 
 protected:
 	// Called when the game starts or when spawned
