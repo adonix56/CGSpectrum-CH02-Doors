@@ -109,3 +109,12 @@ void ATermOnePlayerCharacter::StartInteraction() {
 void ATermOnePlayerCharacter::StopInteraction() {
 	OnInteractionCancel.Broadcast();
 }
+
+void ATermOnePlayerCharacter::HandleItemCollected()
+{
+	ItemsCollected++;
+
+	//Play effects
+
+	ItemCollected();
+}
