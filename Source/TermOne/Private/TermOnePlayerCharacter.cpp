@@ -23,7 +23,7 @@ ATermOnePlayerCharacter::ATermOnePlayerCharacter()
 void ATermOnePlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	PlayerController = GetWorld()->GetFirstPlayerController();
 }
 
 // Called every frame
@@ -51,7 +51,7 @@ void ATermOnePlayerCharacter::FellOutOfWorld(const UDamageType& dmgType) {
 }
 
 void ATermOnePlayerCharacter::OnDeath(bool IsFellOut) {
-	APlayerController* PlayerController = GetController<APlayerController>();
+	//APlayerController* PlayerController = GetController<APlayerController>();
 	if (PlayerController) {
 		PlayerController->DisableInput(PlayerController);
 	}
@@ -60,7 +60,7 @@ void ATermOnePlayerCharacter::OnDeath(bool IsFellOut) {
 
 void ATermOnePlayerCharacter::OnDeathTimerFinished()
 {
-	APlayerController* PlayerController = GetController<APlayerController>();
+	//APlayerController* PlayerController = GetController<APlayerController>();
 	if (PlayerController) {
 		PlayerController->RestartLevel();
 	}
@@ -115,6 +115,7 @@ void ATermOnePlayerCharacter::HandleItemCollected()
 	ItemsCollected++;
 
 	//Play effects
+	PlayerController->PlayerCameraManager->StartCameraShake(CamShake);
 
 	ItemCollected();
 }

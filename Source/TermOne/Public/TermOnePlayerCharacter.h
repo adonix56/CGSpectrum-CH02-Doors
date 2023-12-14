@@ -42,6 +42,11 @@ protected:
 
 	FTimerHandle RestartLevelTimerHandle;
 
+	APlayerController* PlayerController;
+
+	UPROPERTY(EditAnywhere, Category="Effects")
+	TSubclassOf<UCameraShakeBase> CamShake;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
