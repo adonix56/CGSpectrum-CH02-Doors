@@ -117,5 +117,7 @@ void ATermOnePlayerCharacter::HandleItemCollected()
 	//Play effects
 	PlayerController->PlayerCameraManager->StartCameraShake(CamShake);
 
+	PlayerController->PlayDynamicForceFeedback(ForceFeedbackIntensity, ForceFeedbackDuration, true, false, true, false, EDynamicForceFeedbackAction::Start);
+
 	ItemCollected();
 }

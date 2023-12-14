@@ -47,6 +47,13 @@ protected:
 	UPROPERTY(EditAnywhere, Category="Effects")
 	TSubclassOf<UCameraShakeBase> CamShake;
 
+	//Force Feedback
+	UPROPERTY(EditAnywhere, Category = "Haptic Feedback")
+	float ForceFeedbackIntensity = 1.0f;
+
+	UPROPERTY(EditAnywhere, Category = "Haptic Feedback")
+	float ForceFeedbackDuration = 1.0f;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
