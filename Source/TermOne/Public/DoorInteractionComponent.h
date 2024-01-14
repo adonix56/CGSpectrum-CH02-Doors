@@ -77,6 +77,7 @@ public:
 
 	UPROPERTY(BlueprintReadOnly)
 	EDoorState DoorState;
+
 	//My Try
 	/*UPROPERTY(EditAnywhere)
 	float DistanceToOpen;

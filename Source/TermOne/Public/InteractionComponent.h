@@ -4,11 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "Components/TextRenderComponent.h"
 #include "InteractionComponent.generated.h"
 
 class AActor;
 class UCapsuleComponent;
 class UPrimitiveComponent;
+class UTextRenderComponent;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnInteractionSuccess);
 
@@ -45,6 +47,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, NoClear)
 	UCapsuleComponent* TriggerCapsule = nullptr;
+
+	UPROPERTY(EditAnywhere, NoClear)
+	UTextRenderComponent* TextRenderComponent = nullptr;
 
 	AActor* InteractingActor = nullptr;
 

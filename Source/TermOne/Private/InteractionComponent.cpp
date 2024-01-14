@@ -31,6 +31,10 @@ void UInteractionComponent::BeginPlay()
 	if (Player) {
 		Player->OnInteractionStart.AddUObject(this, &UInteractionComponent::InteractionStart);
 	}
+
+	TextRenderComponent = GetOwner()->FindComponentByClass<UTextRenderComponent>();
+	TextRenderComponent->SetText(InteractionPrompt);
+	TextRenderComponent->SetVisibility(false);
 }
 
 void UInteractionComponent::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {
@@ -38,13 +42,21 @@ void UInteractionComponent::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, 
 
 	if (OtherActor->ActorHasTag("Player")) {
 		InteractingActor = OtherActor;
+		if (TextRenderComponent) {
+			TextRenderComponent->SetVisibility(true);
+		}
 	}
 }
 
 
 void UInteractionComponent::OnOverlapEnd(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) {
 	UE_LOG(LogTemp, Warning, TEXT("UInteractionComponent::OnOverlapEnd"));
-	InteractingActor = nullptr;
+	if (OtherActor == InteractingActor) {
+		InteractingActor = nullptr;
+		if (TextRenderComponent) {
+			TextRenderComponent->SetVisibility(false);
+		}
+	}
 }
 
 void UInteractionComponent::InteractionStart() {
