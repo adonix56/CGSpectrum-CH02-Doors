@@ -2,10 +2,12 @@
 
 
 #include "DoorInteractionComponent.h"
+#include "TermOnePlayerCharacter.h"
 #include "GameFramework/Actor.h"
 #include "GameFramework/PlayerController.h"
 #include "Engine/World.h"
 #include "Engine/TriggerBox.h"
+#include "Components/AudioComponent.h"
 #include "ObjectiveWorldSubsystem.h"
 
 //#include "DrawDebugHelpers.h"
@@ -38,7 +40,10 @@ void UDoorInteractionComponent::InteractionStart() {
 	Super::InteractionStart();
 	UE_LOG(LogTemp, Warning, TEXT("InDoorInteraction"));
 	if (InteractingActor) {
-		DoorOpen();
+		ATermOnePlayerCharacter* PlayerCharacter = Cast<ATermOnePlayerCharacter>(InteractingActor);
+		if (PlayerCharacter) {
+			PlayerCharacter->DoorOpenInteractionStarted(GetOwner());
+		}
 	}
 }
 
@@ -51,6 +56,12 @@ void UDoorInteractionComponent::BeginPlay()
 	StartRotation = GetOwner()->GetActorRotation();
 	FinalRotation = GetOwner()->GetActorRotation() + DesiredRotation;
 	CurrentRotationTime = 0.0f;
+
+	AudioComponent = GetOwner()->FindComponentByClass<UAudioComponent>();
+
+	if (!AudioComponent) {
+		UE_LOG(LogTemp, Warning, TEXT("UDoorInteractionComponent::BeginPlay() Missing Audio Component"));
+	}
 	//UE_LOG(LogTemp, Warning, TEXT("Hello! YEEESH"));
 
 	/*UObjectiveWorldSubsystem* ObjectiveWorldSubsystem = GetWorld()->GetSubsystem<UObjectiveWorldSubsystem>();
@@ -66,6 +77,10 @@ void UDoorInteractionComponent::BeginPlay()
 
 void UDoorInteractionComponent::DoorOpen() {
 	if (IsOpen() || DoorState == EDoorState::DS_Opening) { return; }
+
+	if (AudioComponent) {
+		AudioComponent->Play();
+	}
 
 	DoorState = EDoorState::DS_Opening;
 	CurrentRotationTime = 0.0f;

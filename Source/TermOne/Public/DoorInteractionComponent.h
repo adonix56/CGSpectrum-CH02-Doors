@@ -31,14 +31,14 @@ public:
 	// Sets default values for this component's properties
 	UDoorInteractionComponent();
 
+	UFUNCTION(BlueprintCallable)
+	void DoorOpen();
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
 	void InteractionStart() override;
-
-	UFUNCTION(BlueprintCallable)
-	void DoorOpen();
 
 	void OnDoorOpen();
 
@@ -77,6 +77,9 @@ public:
 
 	UPROPERTY(BlueprintReadOnly)
 	EDoorState DoorState;
+
+	UPROPERTY(EditAnywhere, NoClear)
+	UAudioComponent* AudioComponent = nullptr;
 
 	//My Try
 	/*UPROPERTY(EditAnywhere)

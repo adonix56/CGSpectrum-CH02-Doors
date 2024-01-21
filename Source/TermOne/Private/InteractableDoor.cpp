@@ -18,6 +18,10 @@ void AInteractableDoor::BeginPlay() {
 	DoorInteractionComponent->InteractionSuccess.AddDynamic(this, &AInteractableDoor::OnInteractionSuccess);
 }
 
+void AInteractableDoor::DoorOpen() {
+	DoorInteractionComponent->DoorOpen();
+}
+
 void AInteractableDoor::OnInteractionSuccess() {
 	OnDoorOpen.Broadcast();
 }

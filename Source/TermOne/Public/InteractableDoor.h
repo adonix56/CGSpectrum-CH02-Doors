@@ -24,6 +24,9 @@ public:
 	UPROPERTY(BlueprintAssignable, Category="Door Interaction")
 	FOpenDoor OnDoorOpen;
 
+	UFUNCTION(BlueprintCallable)
+	void DoorOpen();
+
 protected:
 	UFUNCTION()
 	void OnInteractionSuccess();
