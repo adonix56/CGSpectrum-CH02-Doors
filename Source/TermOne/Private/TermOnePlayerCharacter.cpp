@@ -1,10 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
+#include "TermOnePlayerCharacter.h"
 #include "HealthComponent.h"
 #include "GameFramework/PlayerController.h"
 #include "GameFramework/DamageType.h"
 #include "DamageHandlerComponent.h"
-#include "TermOnePlayerCharacter.h"
 #include "Particles/ParticleSystemComponent.h"
 
 // Sets default values

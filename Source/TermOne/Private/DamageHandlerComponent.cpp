@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "TermOnePlayerCharacter.h"
 #include "DamageHandlerComponent.h"
+#include "TermOnePlayerCharacter.h"
 #include "Engine/DamageEvents.h"
 #include "Particles/ParticleSystemComponent.h"
 //#include "Misc/ScopeLock.h"
